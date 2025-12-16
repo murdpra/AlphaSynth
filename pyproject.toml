@@ -1,0 +1,77 @@
+[project]
+name = "financialanalysis"
+version = "0.1.0"
+readme = "README.md"
+authors = [{ name = "{{cookiecutter.author}}"}]
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "pydantic>=2.11.7",
+    "pyyaml>=6.0.1",
+    "rich>=14.1.0",
+    "uvicorn==0.38.0",
+    "fastapi==0.124.2",
+    "langchain-openai==1.1.0",
+    "langchain-community==0.4.1",
+    "yfinance==0.2.66",
+    "faiss-cpu==1.13.0",
+    "ddgs==9.9.3",
+    "datasets==4.4.1",
+    "duckduckgo_search==8.1.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.14.9",
+    "mypy>=1.19.0",
+    "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
+
+]
+
+
+[tool.ruff]
+line-length = 99
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "W",      # see: https://pypi.org/project/pycodestyle
+    "F",      # see: https://pypi.org/project/pyflakes
+    "S",      # see: https://pypi.org/project/flake8-bandit
+    "RUF018", # see: https://docs.astral.sh/ruff/rules/assignment-in-assert
+    "UP",     # see: https://docs.astral.sh/ruff/rules/#pyupgrade-up
+]
+extend-select = [
+    "I",      # see: isort
+    "C4",     # see: https://pypi.org/project/flake8-comprehensions
+    "SIM",    # see: https://pypi.org/project/flake8-simplify
+    "RET",    # see: https://pypi.org/project/flake8-return
+    "PT",     # see: https://pypi.org/project/flake8-pytest-style
+    "RUF100", # see: https://docs.astral.sh/ruff/rules/unused-noqa/
+]
+ignore = [
+    "E731", # Do not assign a lambda expression, use a def
+    "S108",
+    "E203", # conflicts with black
+]
+
+[tool.mypy]
+plugins = "pydantic.mypy"
+install_types = true
+non_interactive = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+show_error_codes = true
+warn_redundant_casts = true
+warn_unused_configs = true
+warn_unused_ignores = true
+allow_redefinition = true
+# disable this rule as the Trainer attributes are defined in the connectors, not in its __init__
+disable_error_code = "attr-defined"
+# style choices
+warn_no_return = false
