@@ -23,7 +23,7 @@ synth_agent = SynthAgent()
 
 
 @app.post("/analyze")
-def analyze(q: QueryIn):
+def analyze(q: QueryIn) -> dict:
     try:
         research_out = research_agent.analyze(q.query, k=q.k)
         market_out = market_agent.analyze_ticker(q.company)

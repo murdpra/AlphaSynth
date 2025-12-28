@@ -6,16 +6,15 @@ from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings
 
 
-# Use pd.DataFrame in the type hint
 def build_vectorstore(df: pd.DataFrame, persist_path: str = "vectorstore") -> FAISS:
     load_dotenv()
 
     # CRITICAL: Fail early if API key is missing
     if not os.getenv("OPENAI_API_KEY"):
-        raise OSError("❌ ERROR: OPENAI_API_KEY environment variable is not set.")
+        raise OSError("ERROR: OPENAI_API_KEY environment variable is not set.")
 
     if "text" not in df.columns:
-        raise ValueError("❌ ERROR: Your DataFrame must contain a column named 'text'.")
+        raise ValueError("ERROR: Your DataFrame must contain a column named 'text'.")
 
     texts = df["text"].astype(str).tolist()
     # Ensure all metadata columns exist before converting to dict
@@ -28,9 +27,7 @@ def build_vectorstore(df: pd.DataFrame, persist_path: str = "vectorstore") -> FA
     # Filter columns and prepare metadata
     metadatas = df[metadata_cols].fillna("").to_dict(orient="records")
 
-    embeddings = OpenAIEmbeddings(
-        model="text-embedding-3-small", api_key=os.getenv("OPENAI_API_KEY")
-    )
+    embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
 
     try:
         test = embeddings.embed_query("hello")
