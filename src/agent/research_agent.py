@@ -11,23 +11,13 @@ from pydantic import SecretStr
 
 class ResearchAgent:
     def __init__(self, index_path: str = "vectorstore") -> None:
-        # -----------------------------------------------
-        # 1. ROBUST PATH RESOLUTION (CRITICAL FIX: Targeting src/rag/vectorstore)
-        # -----------------------------------------------
-        # Project structure assumption: [Project Root]/src/agent/research_agent.py
-        agent_dir = Path(__file__).resolve().parent  # /path/to/AlphaSynth/src/agent
-        src_dir = agent_dir.parent  # /path/to/AlphaSynth/src
+        agent_dir = Path(__file__).resolve().parent
+        src_dir = agent_dir.parent
 
-        # 💡 FIX: The path must go to the 'rag' subdirectory within 'src'
         rag_dir = src_dir / "rag"
 
-        # The final path should be /path/to/AlphaSynth/src/rag/vectorstore
         final_index_path = rag_dir / index_path
         final_index_path_str = str(final_index_path)
-
-        # -----------------------------------------------
-        # 2. LLM and EMBEDDINGS SETUP
-        # -----------------------------------------------
         api_key = os.getenv("OPENAI_API_KEY")
         if not api_key:
             raise OSError("OPENAI_API_KEY environment variable is not set.")
@@ -39,9 +29,6 @@ class ResearchAgent:
             model="text-embedding-3-small", openai_api_key=secret_api_key
         )
 
-        # -----------------------------------------------
-        # 3. VECTORSTORE LOADING
-        # -----------------------------------------------
         try:
             self.vectorstore = FAISS.load_local(
                 final_index_path_str,
@@ -50,21 +37,20 @@ class ResearchAgent:
             )
         except Exception as e:
             print(
-                f"CRITICAL: Failed to load FAISS vector store from {final_index_path_str}. \
+                f"Failed to load FAISS vector store from {final_index_path_str}. \
                 Error: {e}"
             )
             print(
                 "\n--------------------------------------------------------------------------------"
             )
-            print(f"🛑 ACTION REQUIRED: Vector store not found at {final_index_path_str}")
-            print("Please run 'python setup_data.py' to create or move the RAG index.")
+            print(f"Vector store not found at {final_index_path_str}")
+            print("Run 'python setup_data.py' to create or move the RAG index.")
             print(
                 "--------------------------------------------------------------------------------\n"
             )
             raise FileNotFoundError(f"FAISS index not found or corrupt at {final_index_path_str}")
 
-    # ... (rest of the methods: retrieve_documents, summarize_chunk, analyze) ...
-    # (These methods remain the same as the previous full rewrite)
+
 
     def retrieve_documents(self, query: str, k: int) -> list[Document]:
         """Retrieve top-k most relevant 10-K chunks."""

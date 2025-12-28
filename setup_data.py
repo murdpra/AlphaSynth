@@ -8,7 +8,7 @@ from pathlib import Path  # Import pathlib for robust pathing
 if os.getcwd() not in sys.path:
     sys.path.append(os.getcwd())
 
-from loader import load_research_dataset
+from src.agent.loader import load_research_dataset
 from vector import build_vectorstore
 
 # Set up basic logging

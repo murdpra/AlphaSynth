@@ -58,7 +58,7 @@ def load_research_dataset(
         df = df[df["company"].str.contains(filter_company, case=False, na=False)]
         logging.info(
             f"Filtered by company '{filter_company}'. Retained {len(df)} documents \
-                  (Dropped {initial_count - len(df)})."
+                (Dropped {initial_count - len(df)})."
         )
 
     if sample and len(df) > sample:

@@ -64,34 +64,34 @@ class RiskAgent:
         """
         schema_json = json.dumps(RiskAssessment.model_json_schema(), indent=2)
         prompt = f"""
-You are an Investment Risk Evaluator AI. Your task is to synthesize the provided Research, Market,
-and News summaries to produce a structured, machine-readable risk assessment.
+            You are an Investment Risk Evaluator AI. Your task is to synthesize the provided Research, Market,
+            and News summaries to produce a structured, machine-readable risk assessment.
 
-Analyze the three inputs for potential downside factors, volatility, and uncertainty.
+            Analyze the three inputs for potential downside factors, volatility, and uncertainty.
 
-Inputs:
----
-## Research Analysis (10-K RAG)
-{research_summary}
+            Inputs:
+            ---
+            ## Research Analysis (10-K RAG)
+            {research_summary}
 
-## Market Analysis (Price/Fundamentals/Indicators)
-{market_summary}
+            ## Market Analysis (Price/Fundamentals/Indicators)
+            {market_summary}
 
-## News Analysis (Sentiment/Headlines)
-{news_summary}
----
+            ## News Analysis (Sentiment/Headlines)
+            {news_summary}
+            ---
 
-Task:
-1.  **Risk Score**: Assign an integer risk score from 0 (very low risk) to 100 (extreme risk).
-2.  **Risk Drivers**: List the top 5 most critical, distinct risk factors.
-3.  **Confidence Level**: State your confidence in the assessment: 'High', 'Medium', or 'Low'.
-4.  **Quantitative Flag**: Extract a simple flag from the Market Analysis.
-    Look for price vs. 20-Day Moving Average: 'Price_Below_MA_Bearish', 'Price_Above_MA_Bullish',
-    or 'Neutral'.
+            Task:
+            1.  **Risk Score**: Assign an integer risk score from 0 (very low risk) to 100 (extreme risk).
+            2.  **Risk Drivers**: List the top 5 most critical, distinct risk factors.
+            3.  **Confidence Level**: State your confidence in the assessment: 'High', 'Medium', or 'Low'.
+            4.  **Quantitative Flag**: Extract a simple flag from the Market Analysis.
+                Look for price vs. 20-Day Moving Average: 'Price_Below_MA_Bearish', 'Price_Above_MA_Bullish',
+                or 'Neutral'.
 
-Format your entire response STRICTLY as a single JSON object matching the following schema:
-{schema_json}
-"""
+            Format your entire response STRICTLY as a single JSON object matching the following schema:
+            {schema_json}
+            """
         try:
             response_text = str(self.llm.invoke([HumanMessage(content=prompt)]).content)
 

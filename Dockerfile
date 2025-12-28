@@ -1,3 +1,4 @@
+
 FROM python:3.11-slim
 
 # Environment settings
@@ -12,20 +13,17 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Poetry
-RUN pip install --no-cache-dir poetry
+# Copy only dependency file first (for Docker cache)
+COPY pyproject.toml ./
 
-# Copy only dependency files first (for Docker cache)
-COPY pyproject.toml poetry.lock* ./
-
-# Configure Poetry: install into system python
-RUN poetry config virtualenvs.create false \
-    && poetry install --no-interaction --no-ansi
+#  Install dependencies
+RUN pip install --no-cache-dir .
 
 # Copy application code
 COPY src ./src
+COPY app.py loader.py setup_data.py vector.py ./
 
 EXPOSE 8000
 
 # Run FastAPI
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
