@@ -2,7 +2,6 @@ import os
 from unittest.mock import patch
 
 import pytest
-
 from src.agent.news_agent import NewsAgent  # adjust import if needed
 
 

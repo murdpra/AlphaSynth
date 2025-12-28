@@ -2,7 +2,6 @@ import json
 from unittest.mock import MagicMock
 
 import pytest
-
 from src.agent.risk_agent import RiskAgent
 
 
