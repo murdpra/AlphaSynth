@@ -4,7 +4,7 @@ from pathlib import Path
 import click
 
 from scripts.vector_store import build_vectorstore
-from src.financial_analysis.rag.loader import load_research_dataset
+from scripts.loader import load_research_dataset
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 

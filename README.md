@@ -16,7 +16,7 @@ AlphaSynth is a sophisticated multi-agent system designed for in-depth financial
 
 The system operates on a modular, agent-based architecture coordinated by a FastAPI application.
 
-*   **Core Orchestrator (`app.py`):** The main entry point for the application. It defines the `/analyze` endpoint and orchestrates the sequential execution and data flow between the various agents.
+*   **Core Orchestrator (`src/financial_analysis/api/main.py`):** The main entry point for the application. It defines the `/analyze` endpoint and orchestrates the sequential execution and data flow between the various agents.
 *   **Agents:**
     *   **`ResearchAgent`:** Responsible for retrieving and analyzing information from the indexed 10-K filings stored in the FAISS vector store.
     *   **`MarketAgent`:** Collects and interprets real-time stock market data, including price movements and financial metrics.
@@ -51,15 +51,16 @@ To set up AlphaSynth locally, follow these steps:
 
 3.  **Install dependencies:**
     ```bash
-    pip install -r requirements.txt
+    make install
     ```
+    If you plan to contribute, use `make edit-install` for editable mode.
 
 4.  **Prepare the RAG Data (CRITICAL STEP):**
     The `ResearchAgent` relies on a pre-built FAISS vector store of 10-K filings. You must run the `setup_data.py` script to generate this vector store. This process may take some time depending on your internet connection and computational resources.
     ```bash
-    python setup_data.py
+    make setup-data
     ```
-    This script will download necessary data and build the `index.faiss` and `index.pkl` files in `src/rag/vectorstore/`.
+    This script will download necessary data and build the `index.faiss` and `index.pkl` files in `src/financial_analysis/rag/vectorstore/`.
 
 ## Usage
 
@@ -68,7 +69,7 @@ Once the application is set up and the data is prepared, you can start the FastA
 ### Starting the Application
 
 ```bash
-uvicorn app:app --reload
+make run
 ```
 This will start the server, typically accessible at `http://127.0.0.1:8000`. The `--reload` flag enables auto-reloading upon code changes (useful for development).
 
