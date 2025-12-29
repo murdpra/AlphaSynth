@@ -58,7 +58,7 @@ To set up AlphaSynth locally, follow these steps:
 4.  **Prepare the RAG Data (CRITICAL STEP):**
     The `ResearchAgent` relies on a pre-built FAISS vector store of 10-K filings. You must run the `setup_data.py` script to generate this vector store. This process may take some time depending on your internet connection and computational resources.
     ```bash
-    make setup-data
+    python setup-data.py
     ```
     This script will download necessary data and build the `index.faiss` and `index.pkl` files in `src/financial_analysis/rag/vectorstore/`.
 
@@ -83,17 +83,18 @@ You can send a POST request to the `/analyze` endpoint with the company's stock 
 
 ```json
 {
-  "ticker": "MSFT",
-  "company_name": "Microsoft Corporation",
+"query":"Is it a good time to buiy APPLE stock?",
+"company":"AAPL",
+"k":4
 }
 ```
 
 **Example `curl` command:**
 
 ```bash
-curl -X POST "http://127.0.0.1:8000/analyze" \
-     -H "Content-Type: application/json" \
-     -d '{"ticker": "MSFT", "company_name": "Microsoft Corporation"}'
+curl --location 'http://127.0.0.1:8000/analyze' \
+--header 'Content-Type: application/json' \
+--data '{"query":"Is it a good time to buiy APPLE stock?","company":"AAPL","k":4}'
 ```
 
 ### Expected Response
