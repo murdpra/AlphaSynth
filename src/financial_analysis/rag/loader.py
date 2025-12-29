@@ -22,39 +22,27 @@ def load_research_dataset(
 
         raise RuntimeError(f"Data loading failed: {e}")
 
-    # 1. Column Aggregation
-    # Identify item columns (Item 1 to Item 15 of a 10-K filing)
     item_cols: list[str] = [col for col in df.columns if col.startswith("item_")]
 
     if not item_cols:
         logging.warning("No 'item_X' columns found. Data schema may be incorrect.")
 
-    # 💡 Robustly handle missing values (fillna) and combine text fields with clear separator
     df["text"] = df[item_cols].fillna("").astype(str).agg(" \n\n ".join, axis=1)
 
-    # 2. Column Selection and Standardizing Metadata
     required_cols = ["company", "cik", "date", "text"]
 
-    # Ensure only necessary metadata and the 'text' column remain
     df = df.reindex(columns=required_cols)
 
-    # 3. Data Cleaning and Filtering
-
-    # Ensure 'text' column is string type
     df["text"] = df["text"].astype(str)
 
-    # 💡 CRITICAL: Filter out rows where the combined text is too short (empty/corrupted filings)
     df = df[df["text"].str.len() > 100]
 
-    # Drop rows where critical metadata (like 'company' or 'text') is missing
     df = df.dropna(subset=["text", "company"])
 
     logging.info(f"Dataset loaded and cleaned. Total number of documents: {len(df)}")
 
-    # 4. Sampling and Filtering Logic (Company filter must run first)
     if filter_company:
         initial_count = len(df)
-        # Filter by company, case-insensitive
         df = df[df["company"].str.contains(filter_company, case=False, na=False)]
         logging.info(
             f"Filtered by company '{filter_company}'. Retained {len(df)} documents \
@@ -62,7 +50,6 @@ def load_research_dataset(
         )
 
     if sample and len(df) > sample:
-        # Sample only after filtering by company
         df = df.sample(n=sample, random_state=42).reset_index(drop=True)
         logging.info(f"Dataset sampled down to {sample} documents.")
 

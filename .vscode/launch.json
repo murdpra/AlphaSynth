@@ -8,8 +8,20 @@
             "name": "Run app",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/app.py",
-            "console": "integratedTerminal"
+            "module": "uvicorn",
+            "args": [
+                "financial_analysis.api.main:app",
+                "--host",
+                "0.0.0.0",
+                "--port",
+                "8000",
+                "--reload"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/src"
+            }
         },
         {
             "name": "Python Debugger: Current File with Arguments",

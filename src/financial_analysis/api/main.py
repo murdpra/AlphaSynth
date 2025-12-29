@@ -4,13 +4,14 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
 
-from src.agent.market_agent import MarketAgent
-from src.agent.news_agent import NewsAgent
-from src.agent.research_agent import ResearchAgent
-from src.agent.risk_agent import RiskAgent
-from src.agent.synthesize_agent import SynthAgent
+from financial_analysis.analysis.market import MarketAgent
+from financial_analysis.analysis.news import NewsAgent
+from financial_analysis.analysis.research import ResearchAgent
+from financial_analysis.analysis.risk import RiskAgent
+from financial_analysis.analysis.synthesizer import SynthAgent
+
+from .models import QueryIn
 
 app = FastAPI(title="Financial RAG Orchestrator")
 
@@ -21,14 +22,8 @@ risk_agent = RiskAgent()
 synth_agent = SynthAgent()
 
 
-class QueryIn(BaseModel):
-    query: str
-    company: str
-    k: int = 4
-
-
 @app.post("/analyze")
-def analyze(q: QueryIn):
+def analyze(q: QueryIn) -> dict:
     try:
         research_out = research_agent.analyze(q.query, k=q.k)
         market_out = market_agent.analyze_ticker(q.company)
@@ -41,4 +36,4 @@ def analyze(q: QueryIn):
 
 
 if __name__ == "__main__":
-    uvicorn.run("app:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("financial_analysis.api.main:app", host="127.0.0.1", port=8000, reload=True)

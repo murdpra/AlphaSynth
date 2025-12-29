@@ -11,13 +11,10 @@ from pydantic import SecretStr
 
 class ResearchAgent:
     def __init__(self, index_path: str = "vectorstore") -> None:
-        agent_dir = Path(__file__).resolve().parent
-        src_dir = agent_dir.parent
-
-        rag_dir = src_dir / "rag"
-
-        final_index_path = rag_dir / index_path
+        package_root = Path(__file__).resolve().parent.parent
+        final_index_path = package_root / "rag" / index_path
         final_index_path_str = str(final_index_path)
+
         api_key = os.getenv("OPENAI_API_KEY")
         if not api_key:
             raise OSError("OPENAI_API_KEY environment variable is not set.")
@@ -44,13 +41,11 @@ class ResearchAgent:
                 "\n--------------------------------------------------------------------------------"
             )
             print(f"Vector store not found at {final_index_path_str}")
-            print("Run 'python setup_data.py' to create or move the RAG index.")
+            print("Run 'python scripts/setup_data.py' to create the RAG index.")
             print(
                 "--------------------------------------------------------------------------------\n"
             )
             raise FileNotFoundError(f"FAISS index not found or corrupt at {final_index_path_str}")
-
-
 
     def retrieve_documents(self, query: str, k: int) -> list[Document]:
         """Retrieve top-k most relevant 10-K chunks."""

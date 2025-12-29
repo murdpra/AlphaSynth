@@ -2,7 +2,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from src.agent.synthesize_agent import SynthAgent
+from src.financial_analysis.analysis.synthesizer import SynthAgent
 
 
 @pytest.fixture
@@ -57,7 +57,6 @@ def mock_llm_failure():
     mock = MagicMock()
     mock.invoke.side_effect = RuntimeError("LLM crashed")
     return mock
-
 
 
 def test_synthesize_success(set_openai_key, sample_inputs, mock_llm_success):
