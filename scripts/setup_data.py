@@ -2,6 +2,7 @@ import logging
 from pathlib import Path
 
 import click
+
 from src.financial_analysis.rag.loader import load_research_dataset
 from src.financial_analysis.rag.vector_store import build_vectorstore
 
@@ -64,4 +65,3 @@ def main(data_path, filter_company, sample_size):
 
 if __name__ == "__main__":
     main()
-

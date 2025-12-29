@@ -4,7 +4,7 @@ import pytest
 from langchain_core.documents import Document
 
 # Import your agent
-from src.agent.research_agent import ResearchAgent
+from src.financial_analysis.analysis.research import ResearchAgent
 
 # -------------------------------------------------------------------
 # FIXTURES
@@ -35,9 +35,9 @@ def mock_faiss():
 # -------------------------------------------------------------------
 
 
-@patch("src.agent.research_agent.FAISS.load_local")
-@patch("src.agent.research_agent.ChatOpenAI")
-@patch("src.agent.research_agent.OpenAIEmbeddings")
+@patch("src.financial_analysis.analysis.research.FAISS.load_local")
+@patch("src.financial_analysis.analysis.research.ChatOpenAI")
+@patch("src.financial_analysis.analysis.research.OpenAIEmbeddings")
 def test_research_agent_initialization_success(
     mock_embeddings, mock_chatopenai, mock_faiss_load, mock_faiss
 ):
@@ -52,9 +52,12 @@ def test_research_agent_initialization_success(
     assert agent.embeddings is not None  # noqa: S101
 
 
-@patch("src.agent.research_agent.FAISS.load_local", side_effect=Exception("Missing index"))
-@patch("src.agent.research_agent.ChatOpenAI")
-@patch("src.agent.research_agent.OpenAIEmbeddings")
+@patch(
+    "src.financial_analysis.analysis.research.FAISS.load_local",
+    side_effect=Exception("Missing index"),
+)
+@patch("src.financial_analysis.analysis.research.ChatOpenAI")
+@patch("src.financial_analysis.analysis.research.OpenAIEmbeddings")
 def test_research_agent_init_fails_if_vectorstore_missing(
     mock_embeddings, mock_chatopenai, mock_faiss_load
 ):
@@ -68,9 +71,9 @@ def test_research_agent_init_fails_if_vectorstore_missing(
 # -------------------------------------------------------------------
 
 
-@patch("src.agent.research_agent.FAISS.load_local")
-@patch("src.agent.research_agent.ChatOpenAI")
-@patch("src.agent.research_agent.OpenAIEmbeddings")
+@patch("src.financial_analysis.analysis.research.FAISS.load_local")
+@patch("src.financial_analysis.analysis.research.ChatOpenAI")
+@patch("src.financial_analysis.analysis.research.OpenAIEmbeddings")
 def test_retrieve_documents(mock_embeddings, mock_chatopenai, mock_faiss_load, mock_faiss):
     mock_faiss_load.return_value = mock_faiss
     agent = ResearchAgent()
@@ -87,9 +90,9 @@ def test_retrieve_documents(mock_embeddings, mock_chatopenai, mock_faiss_load, m
 # -------------------------------------------------------------------
 
 
-@patch("src.agent.research_agent.FAISS.load_local")
-@patch("src.agent.research_agent.ChatOpenAI")
-@patch("src.agent.research_agent.OpenAIEmbeddings")
+@patch("src.financial_analysis.analysis.research.FAISS.load_local")
+@patch("src.financial_analysis.analysis.research.ChatOpenAI")
+@patch("src.financial_analysis.analysis.research.OpenAIEmbeddings")
 def test_summarize_chunk(mock_embeddings, mock_chatopenai, mock_faiss_load, mock_faiss):
     mock_faiss_load.return_value = mock_faiss
 
@@ -110,9 +113,9 @@ def test_summarize_chunk(mock_embeddings, mock_chatopenai, mock_faiss_load, mock
 # -------------------------------------------------------------------
 
 
-@patch("src.agent.research_agent.FAISS.load_local")
-@patch("src.agent.research_agent.ChatOpenAI")
-@patch("src.agent.research_agent.OpenAIEmbeddings")
+@patch("src.financial_analysis.analysis.research.FAISS.load_local")
+@patch("src.financial_analysis.analysis.research.ChatOpenAI")
+@patch("src.financial_analysis.analysis.research.OpenAIEmbeddings")
 def test_analyze_happy_path(mock_embeddings, mock_chatopenai, mock_faiss_load, mock_faiss):
     mock_faiss_load.return_value = mock_faiss
 
@@ -128,9 +131,9 @@ def test_analyze_happy_path(mock_embeddings, mock_chatopenai, mock_faiss_load, m
     assert mock_llm.invoke.called  # noqa: S101
 
 
-@patch("src.agent.research_agent.FAISS.load_local")
-@patch("src.agent.research_agent.ChatOpenAI")
-@patch("src.agent.research_agent.OpenAIEmbeddings")
+@patch("src.financial_analysis.analysis.research.FAISS.load_local")
+@patch("src.financial_analysis.analysis.research.ChatOpenAI")
+@patch("src.financial_analysis.analysis.research.OpenAIEmbeddings")
 def test_analyze_llm_failure_returns_fallback(
     mock_embeddings, mock_chatopenai, mock_faiss_load, mock_faiss
 ):

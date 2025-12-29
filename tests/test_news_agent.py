@@ -2,13 +2,15 @@ import os
 from unittest.mock import patch
 
 import pytest
-from src.agent.news_agent import NewsAgent  # adjust import if needed
+
+from src.financial_analysis.analysis.news import NewsAgent
 
 
 @pytest.fixture
 def agent():
     with patch.dict(os.environ, {"OPENAI_API_KEY": "testkey"}, clear=True):
         return NewsAgent(llm_model="gpt-4o-mini")
+
 
 @patch("langchain_community.tools.DuckDuckGoSearchRun.run")
 def test_fetch_live_news_success(mock_run, agent):
@@ -26,7 +28,6 @@ def test_fetch_live_news_empty(mock_run, agent):
     result = agent.fetch_live_news("Apple")
 
     assert "No relevant news snippets found for Apple" in result  # noqa: S101
-
 
 
 @patch("langchain_community.tools.DuckDuckGoSearchRun.run")

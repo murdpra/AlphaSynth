@@ -24,8 +24,8 @@ class RiskAssessment(BaseModel):
     risk_drivers: Annotated[
         list[str],
         Field(
-            min_items=1,
-            max_items=5,
+            min_length=1,
+            max_length=5,
             description="The top 5 most critical risk factors identified.",
         ),
     ]

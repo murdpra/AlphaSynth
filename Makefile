@@ -7,7 +7,7 @@ help:  ## Display this help
 ##@ Development
 
 test: ## Run tests
-	pytest --cov={{cookiecutter.project_slug}} $(TESTS_DIR)/
+	python -m pytest --cov=src/financial_analysis $(TESTS_DIR)/
 .PHONY: test
 
 lint: ## Lint the code
@@ -18,7 +18,7 @@ typecheck: ## Run type checking
 	mypy ./src
 .PHONY: typecheck
 
-test-all: lint typecheck ## Run all tests, linting, and type checking
+test-all: lint typecheck test ## Run all tests, linting, type checking, and unit tests
 .PHONY: test-all
 
 format: ## Format the code

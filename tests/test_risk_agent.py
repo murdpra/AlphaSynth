@@ -2,7 +2,8 @@ import json
 from unittest.mock import MagicMock
 
 import pytest
-from src.agent.risk_agent import RiskAgent
+
+from src.financial_analysis.analysis.risk import RiskAgent
 
 
 @pytest.fixture
@@ -60,6 +61,7 @@ def mock_llm_invalid_json():
 @pytest.fixture
 def set_openai_key(monkeypatch):
     monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+
 
 def test_compute_risk_success(set_openai_key, valid_inputs, mock_llm_success):
     agent = RiskAgent()

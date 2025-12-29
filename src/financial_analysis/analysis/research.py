@@ -47,8 +47,6 @@ class ResearchAgent:
             )
             raise FileNotFoundError(f"FAISS index not found or corrupt at {final_index_path_str}")
 
-
-
     def retrieve_documents(self, query: str, k: int) -> list[Document]:
         """Retrieve top-k most relevant 10-K chunks."""
         return self.vectorstore.similarity_search(query, k=k)

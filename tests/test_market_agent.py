@@ -3,7 +3,8 @@ from unittest.mock import MagicMock, patch
 
 import pandas as pd
 import pytest
-from src.agent.market_agent import MarketAgent
+
+from src.financial_analysis.analysis.market import MarketAgent
 
 
 @pytest.fixture
@@ -28,7 +29,6 @@ def test_load_market_success(mock_download, agent):
     assert "open" in df.columns  # noqa: S101
 
 
-
 @patch("yfinance.download")
 def test_load_market_empty(mock_download, agent):
     mock_download.return_value = pd.DataFrame()
@@ -44,6 +44,7 @@ def test_analyze_ticker_empty_data(mock_download, agent):
     result = agent.analyze_ticker("AAPL")
 
     assert "No market data found" in result  # noqa: S101
+
 
 @patch("yfinance.download")
 def test_analyze_ticker_missing_close(mock_download, agent):
@@ -76,7 +77,6 @@ def test_analyze_ticker_success(mock_invoke, mock_ticker, mock_download, agent):
     assert result == "LLM RESULT"  # noqa: S101
 
 
-
 @patch("yfinance.download")
 @patch("yfinance.Ticker")
 @patch("langchain_openai.ChatOpenAI.invoke")
@@ -89,13 +89,13 @@ def test_analyze_ticker_llm_failure(mock_invoke, mock_ticker, mock_download, age
         "forwardPE": 15,
     }
 
-
     mock_invoke.side_effect = Exception("LLM crashed")
 
     result = agent.analyze_ticker("AAPL")
 
     assert "LLM analysis failed" in result  # noqa: S101
     assert "LLM crashed" in result  # noqa: S101
+
 
 @patch("yfinance.download", side_effect=Exception("Network down"))
 def test_analyze_ticker_fetch_exception(mock_download, agent):
