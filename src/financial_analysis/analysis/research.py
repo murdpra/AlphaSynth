@@ -11,8 +11,6 @@ from pydantic import SecretStr
 
 class ResearchAgent:
     def __init__(self, index_path: str = "vectorstore") -> None:
-        # The file is in src/financial_analysis/analysis/
-        # We need to get to src/financial_analysis/rag/vectorstore
         package_root = Path(__file__).resolve().parent.parent
         final_index_path = package_root / "rag" / index_path
         final_index_path_str = str(final_index_path)

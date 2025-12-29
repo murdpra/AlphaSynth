@@ -9,7 +9,6 @@ from langchain_openai import OpenAIEmbeddings
 def build_vectorstore(df: pd.DataFrame, persist_path: str = "vectorstore") -> FAISS:
     load_dotenv()
 
-    # CRITICAL: Fail early if API key is missing
     if not os.getenv("OPENAI_API_KEY"):
         raise OSError("ERROR: OPENAI_API_KEY environment variable is not set.")
 
@@ -17,17 +16,16 @@ def build_vectorstore(df: pd.DataFrame, persist_path: str = "vectorstore") -> FA
         raise ValueError("ERROR: Your DataFrame must contain a column named 'text'.")
 
     texts = df["text"].astype(str).tolist()
-    # Ensure all metadata columns exist before converting to dict
     metadata_cols = ["company", "cik", "date"]
     for col in metadata_cols:
         if col not in df.columns:
-            # Setting a default empty string for missing metadata columns
             df[col] = ""
 
-    # Filter columns and prepare metadata
     metadatas = df[metadata_cols].fillna("").to_dict(orient="records")
 
-    embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
+    embeddings = OpenAIEmbeddings(
+        model="text-embedding-3-small", openai_api_key=os.getenv("OPENAI_API_KEY")
+    )
 
     try:
         test = embeddings.embed_query("hello")
