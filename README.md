@@ -83,7 +83,7 @@ You can send a POST request to the `/analyze` endpoint with the company's stock 
 
 ```json
 {
-"query":"Is it a good time to buiy APPLE stock?",
+"query":"Is it a good time to buy APPLE stock?",
 "company":"AAPL",
 "k":4
 }
