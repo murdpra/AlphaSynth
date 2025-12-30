@@ -94,7 +94,7 @@ You can send a POST request to the `/analyze` endpoint with the company's stock 
 ```bash
 curl --location 'http://127.0.0.1:8000/analyze' \
 --header 'Content-Type: application/json' \
---data '{"query":"Is it a good time to buiy APPLE stock?","company":"AAPL","k":4}'
+--data '{"query":"Is it a good time to buy APPLE stock?","company":"AAPL","k":4}'
 ```
 
 ### Expected Response
